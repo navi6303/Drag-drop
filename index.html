@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drag & Drop</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="message">
+    <p class="success-message" id="successMessage"></p>
+  </div>
+<div class="container">
+  <div id="container1">
+    <div class="item" draggable="true" ondragstart="drag(event)" id="item1">Item 1</div>
+    <div class="item" draggable="true" ondragstart="drag(event)" id="item2">Item 2</div>
+    <div class="item" draggable="true" ondragstart="drag(event)" id="item3">Item 3</div>
+    <div class="item" draggable="true" ondragstart="drag(event)" id="item3">Item 4</div>
+  </div>
+
+  <div id="container2" ondrop="drop(event)" ondragover="allowDrop(event)">
+
+  </div>
+
+</div>
+  <div id="bottom">
+    <button class="btn" onclick="reset()">Reset</button>
+  </div>
+
+
+
+  <script>
+    var container1 = document.getElementById("container1");
+    var container1OriginalContent = container1.innerHTML;
+    var container2 = document.getElementById("container2");
+    var draggedItems = [];
+
+    function drag(event) {
+      event.dataTransfer.setData("text", event.target.id);
+      draggedItems.push(event.target.id);
+    }
+
+    function allowDrop(event) {
+      event.preventDefault();
+    }
+
+    function drop(event) {
+      event.preventDefault();
+      var data = event.dataTransfer.getData("text");
+      var droppedItem = document.getElementById(data);
+      event.target.appendChild(droppedItem);
+      showSuccessMessage();
+    }
+
+    function showSuccessMessage() {
+      var successMessage = document.getElementById("successMessage");
+      successMessage.innerText = "Item dropped successfully!";
+    }
+
+    function reset() {
+      container2.innerHTML = ' ';
+
+      container1.innerHTML = container1OriginalContent;
+
+      draggedItems.forEach(function(itemId) {
+        var item = document.getElementById(itemId);
+        container1.appendChild(item);
+      });
+
+      draggedItems = [];
+
+      var successMessage = document.getElementById("successMessage");
+      successMessage.innerText = "";
+    }
+  </script>
+</body>
+</html>
